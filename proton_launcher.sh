@@ -11,8 +11,12 @@ PROTON_VERSION="Proton 3.16 Beta"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "${DIR}"
 
+if [ $# -ne 0 ]; then
+    EXE_NAME="$1"
+fi
+
 if [ -z ${EXE_NAME} ]; then
-    echo "Uncomment and correct EXE_NAME!"
+    echo "Uncomment and correct EXE_NAME or give it as an argument!"
     exit
 fi
 
