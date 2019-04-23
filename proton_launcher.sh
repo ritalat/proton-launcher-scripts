@@ -38,15 +38,15 @@ if ! [ -d "${STEAM_COMPAT_DATA_PATH}"/pfx ]; then
     mkdir -p "${STEAM_COMPAT_DATA_PATH}"/pfx
 fi
 
+export WINEPREFIX="${STEAM_COMPAT_DATA_PATH}/pfx"
+export WINE="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/wine64"
+export WINESERVER="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/wineserver"
+export WINEDLLPATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib64/wine:${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib/wine"
+export PATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/bin:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/bin:${PATH}"
+export LD_LIBRARY_PATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib64:${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/pinned_libs_32:${STEAM_PATH}/ubuntu12_32/steam-runtime/pinned_libs_64:/usr/lib/x86_64-linux-gnu/libfakeroot:/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu:/usr/local/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib:/usr/lib/i386-linux-gnu/i686:/usr/lib/i386-linux-gnu/sse2:/usr/lib/i386-linux-gnu/i686/sse2:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/lib/i386-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/usr/lib/i386-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/usr/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/lib/x86_64-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/lib/x86_64-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/lib:${LD_LIBRARY_PATH}"
+
 # Running wine, winecfg, regedit or winetricks
 if [ "${EXE_NAME}" = "wine" ] || [ "${EXE_NAME}" = "winetricks" ]; then
-
-    export WINEPREFIX="${STEAM_COMPAT_DATA_PATH}/pfx"
-    export WINE="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/wine64"
-    export WINESERVER="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/wineserver"
-    export WINEDLLPATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib64/wine:${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib/wine"
-    export PATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/bin:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/bin:${PATH}"
-    export LD_LIBRARY_PATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib64:${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/pinned_libs_32:${STEAM_PATH}/ubuntu12_32/steam-runtime/pinned_libs_64:/usr/lib/x86_64-linux-gnu/libfakeroot:/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu:/usr/local/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib:/usr/lib/i386-linux-gnu/i686:/usr/lib/i386-linux-gnu/sse2:/usr/lib/i386-linux-gnu/i686/sse2:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/lib/i386-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/usr/lib/i386-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/usr/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/lib/x86_64-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/lib/x86_64-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/lib:${LD_LIBRARY_PATH}"
 
     # Run the commands
     echo "running \"${EXE_NAME}\" directly with arguments: $@"
