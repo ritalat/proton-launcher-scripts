@@ -4,7 +4,7 @@ substitute for any Windows program.
 proton_launcher.sh is intended to be used for a single program. By default
 it creates a separate wineprefix "proton/pfx" inside the directory where the
 script is placed. For a more general system-wide Wine replacement, check the
-"global" directory in this repo (soonTM).
+"global" directory in this repo.
 
 Installation
 ------------

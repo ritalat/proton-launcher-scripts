@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# USER CONFIG
+#STEAM_PATH="${HOME}/.steam"
+#STEAM_LIBRARY="${STEAM_PATH}/steam/steamapps"
+#PROTON_VERSION="Proton 3.16 Beta"
+
+#export DXVK_HUD=version,devinfo,fps
+#export PROTON_LOG=1
+#export PROTON_DUMP_DEBUG_COMMANDS=1
+#export PROTON_DEBUG_DIR=1
+#export PROTON_USE_WINED3D=1
+#export PROTON_NO_D3D11=1
+#export PROTON_NO_D3D10=1
+#export PROTON_NO_ESYNC=1
+#export PROTON_FORCE_LARGE_ADDRESS_AWARE=1
+#export PROTON_OLD_GL_STRING=1
+
+
+if [ -z "${STEAM_PATH}" ] || [ -z "${STEAM_LIBRARY}" ] || [ -z "${PROTON_VERSION}" ]; then
+    echo "Can't find Proton. Make sure STEAM_PATH, STEAM_LIBRARY and PROTON_VERSION are set."
+    exit
+fi
+
+if [ $# -ne 0 ]; then
+    EXE_NAME="$1"
+    shift
+fi
+
+if [ ! -z "${WINEPREFIX}" ]; then
+    echo "Overriding WINEPREFIX. Set STEAM_COMPAT_DATA_PATH instead."
+fi
+
+if [ -z "${STEAM_COMPAT_DATA_PATH}" ]; then
+    echo "No STEAM_COMPAT_DATA_PATH set. Using ${HOME}/.proton"
+    export STEAM_COMPAT_DATA_PATH="${HOME}/.proton"
+fi
+
+if ! [ -d "${STEAM_COMPAT_DATA_PATH}/pfx" ]; then
+    mkdir -p "${STEAM_COMPAT_DATA_PATH}/pfx"
+fi
+
+export WINEPREFIX="${STEAM_COMPAT_DATA_PATH}/pfx"
+export WINE="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/wine"
+export WINESERVER="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/wineserver"
+export WINEDLLPATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib64/wine:${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib/wine"
+export PATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/bin/:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/bin:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/bin:${PATH}"
+export LD_LIBRARY_PATH="${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib64:${STEAM_LIBRARY}/common/${PROTON_VERSION}/dist/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/pinned_libs_32:${STEAM_PATH}/ubuntu12_32/steam-runtime/pinned_libs_64:/usr/lib/x86_64-linux-gnu/libfakeroot:/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu:/usr/local/lib:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/lib:/usr/lib:/usr/lib/i386-linux-gnu/i686:/usr/lib/i386-linux-gnu/sse2:/usr/lib/i386-linux-gnu/i686/sse2:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/lib/i386-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/usr/lib/i386-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/i386/usr/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/lib/x86_64-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/lib:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/lib/x86_64-linux-gnu:${STEAM_PATH}/ubuntu12_32/steam-runtime/amd64/usr/lib:${LD_LIBRARY_PATH}"
+
+if [ "${EXE_NAME}" = "winetricks" ]; then
+    echo "Running winetricks with arguments: $@"
+    "${EXE_NAME}" "$@"
+
+elif [ -z "${EXE_NAME}" ] || [ "${EXE_NAME}" = "winecfg" ] || [ "${EXE_NAME}" = "regedit" ] || [ "${EXE_NAME}" = "cmd" ]; then
+    echo "Running built-in wine command ${EXE_NAME} $@"
+    "${WINE}" "${EXE_NAME}" "$@"
+
+else
+    echo "Running \"${EXE_NAME}\" through proton with arguments: $@"
+    "${STEAM_LIBRARY}/common/${PROTON_VERSION}/proton" run "${EXE_NAME}" "$@"
+fi
+
+
